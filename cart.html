@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - La Floreria</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: url(./png/try2.jpg) no-repeat top center;
+            background-size: cover;
+            color: #ffffff;
+            padding: 140px 20px;
+            text-align: center;
+            position: relative;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            background: rgba(0, 0, 0, 0.5);
+            display: inline-block;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        nav {
+            background-color: #333333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            position: relative;
+        }
+        nav .nav-left {
+            display: flex;
+            align-items: center;
+        }
+        nav .logo img {
+            height: 40px;
+            margin-left: 20px;
+        }
+        nav .nav-links {
+            display: flex;
+            margin-left: 20px;
+        }
+        nav .nav-links a {
+            color: #e0e0e0;
+            margin: 0 15px;
+            text-decoration: none;
+            text-align: center;
+        }
+        nav .nav-links a:hover {
+            text-decoration: underline;
+        }
+        nav .search-container {
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+        }
+        nav .search-container input[type="text"] {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        nav .search-container button {
+            padding: 5px 10px;
+            margin-left: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        nav .search-container button:hover {
+            background-color: #45a049;
+        }
+        nav .cart-icon img {
+            height: 40px;
+            cursor: pointer;
+        }
+        main {
+            padding: 20px;
+        }
+        footer {
+            background-color: #333333;
+            color: #e0e0e0;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .cart-container {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .cart-item {
+        display: grid;
+        grid-template-columns: 5% 55% 10% 20% 10%;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #333333;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .cart-item-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left;
+        }
+        
+        .item-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+        .item-quantity {
+            font-size: 1.2em;
+            color: #e0e0e0;
+            text-align: center;
+        }
+
+        .cart-item-price {
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .cart-item-remove {
+            text-align: center;
+        }
+        .cart-item-remove button {
+            background-color: #d32f2f;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            padding: 8px;
+        }
+        .cart-item-remove button:hover {
+            background-color: #c62828;
+        }
+
+.cart-item-info h3 {
+    margin-right: 40px; 
+}
+
+
+        .cart-total {
+            text-align: right;
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        .checkout-button {
+            display: block;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px 0;
+            width: 100%;
+        }
+        .checkout-button:hover {
+            background-color: #45a049;
+        }
+        .search-dropdown {
+        position: absolute;
+        background: #333;
+        color: #fff;
+        width: 200px;
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #555;
+        border-radius: 5px;
+        display: none;
+        z-index: 1000;
+    }
+    .search-dropdown a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #fff;
+    }
+    .search-dropdown a:hover {
+        background: #555;
+    }
+    .suggestions-box {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #1e1e1e;
+            border: 1px solid #444;
+            border-top: none;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #333;
+            transition: background 0.2s;
+            color: #e0e0e0;
+        }
+
+
+        .suggestion-item:hover {
+            background-color: #333;
+        }
+
+        .suggestion-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            object-position: center;
+            margin-right: 10px;
+            border-radius: 5px;
+            flex-shrink: 0;
+        }
+
+        .suggestions-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .suggestions-box::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        .suggestions-box::-webkit-scrollbar-thumb {
+        background-color: #555;
+        border-radius: 10px;
+    }
+
+    .suggestions-box::-webkit-scrollbar-thumb:hover {
+        background-color: #777;
+    }
+
+    .suggestions-box {
+        scrollbar-width: thin;
+        scrollbar-color: #555 #1e1e1e;
+    }
+    @media (max-width: 768px) {
+    header {
+        padding: 80px 10px;
+    }
+
+    header h1 {
+        font-size: 1.8em;
+        padding: 10px;
+    }
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav .nav-left {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    nav .nav-links {
+        flex-direction: column;
+        margin-left: 0;
+        width: 100%;
+    }
+
+    nav .nav-links a {
+        margin: 10px 0;
+    }
+
+    nav .search-container {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    nav .search-container input[type="text"] {
+        width: 100%;
+    }
+
+    .cart-icon {
+        align-self: center;
+        margin-top: 10px;
+    }
+    .cart-icon img {
+        height: 5%;
+    }
+    .flower-item {
+        width: 100%;
+    }
+    .logo {
+        display: none;
+    }
+    header img {
+        width: 45%;
+    }
+    header {
+        padding: 80px 10px;
+    }
+
+    header h1 {
+        font-size: 1.8em;
+        padding: 10px;
+    }
+
+    .cart-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .cart-item img {
+        width: 60%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .item-name, .item-quantity, .cart-item-price {
+        font-size: 1em;
+        text-align: center;
+        margin: 5px 0;
+    }
+
+    .cart-item-remove {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .cart-item-remove button {
+        width: 100%;
+        font-size: 1em;
+        padding: 10px;
+    }
+
+    .cart-total {
+        text-align: center;
+        font-size: 1.2em;
+    }
+
+    .checkout-button {
+        font-size: 1em;
+        padding: 12px;
+    }
+
+    .container {
+        padding: 0 10px;
+    }
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Корзина</h1>
+    </header>
+    <nav>
+        <div class="nav-left">
+            <div class="logo">
+                <img src="./png/Logo.png" alt="Логотип">
+            </div>
+            <div class="search-container">
+	<div style="position: relative; width: 250px;">
+	<input type="text" id="searchInput" placeholder="Пошук..." style="width: 100%;">
+	<div id="suggestions" class="suggestions-box"></div>
+</div>
+	<button onclick="startSearch()">Пошук</button>
+</div>
+            <div class="nav-links">
+                <a href="index.php">Головна</a>
+                <a href="katalog.php">Каталог</a>
+                <a href="about.html">Про нас</a>
+                <a href="services.html">Послуги</a>
+                <a href="contact.html">Контакти</a>
+            </div>
+        </div>
+        <div class="cart-icon">
+            <a href="cart.html">
+                <img src="./png/korz.png" alt="Корзина">
+            </a>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            <h2>Ваші товари:</h2>
+            <div class="cart-container" id="cart-items">
+                <!-- Товары будут добавлены сюда через JavaScript -->
+            </div>
+            <div class="cart-total">
+                Загальна сума: <span id="total-price"></span>грн.
+            </div>
+            <button class="checkout-button" onclick="redirectToCheckout()">Оформити замовлення</button>
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 La Floreria
+    </footer>
+    <script>
+    function loadCart() {
+    const cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
+    const cartItems = document.getElementById('cart-items');
+    let total = 0;
+    cartItems.innerHTML = '';  
+
+    cart.forEach((item, index) => {
+        const cartItem = document.createElement('div');
+        cartItem.className = 'cart-item';
+
+        // Фото
+        const itemImage = document.createElement('img');
+        itemImage.src = item.image && item.image.trim() ? item.image : './png/placehold.png';
+        itemImage.alt = item.name || 'Изображение недоступно';
+
+        // Название
+        const itemName = document.createElement('p');
+        itemName.className = 'item-name';
+        itemName.textContent = item.name;
+
+        // Количество
+        const itemQuantity = document.createElement('p');
+        itemQuantity.className = 'item-quantity';
+        itemQuantity.textContent = `Кількість: ${item.quantity}`;
+
+        // Цена
+        const cartItemPrice = document.createElement('p');
+        cartItemPrice.className = 'cart-item-price';
+        item.price = Number(keepOnlyNumbers(String(item.price)));
+        cartItemPrice.textContent = `${item.price} грн.`;
+
+        // Кнопка удаления
+        const cartItemRemove = document.createElement('div');
+        cartItemRemove.className = 'cart-item-remove';
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Видалити';
+        removeButton.onclick = () => removeFromCart(index); 
+        cartItemRemove.appendChild(removeButton);
+
+        // Добавляем элементы в `.cart-item`
+        cartItem.appendChild(itemImage);
+        cartItem.appendChild(itemName);
+        cartItem.appendChild(itemQuantity);
+        cartItem.appendChild(cartItemPrice);
+        cartItem.appendChild(cartItemRemove);
+
+        cartItems.appendChild(cartItem);
+
+        total += item.price * item.quantity;
+    });
+
+    document.getElementById('total-price').innerText = total;
+}
+
+
+
+
+
+    function removeFromCart(index) {
+    let cart = JSON.parse(localStorage.getItem('cart'));
+
+    if (cart[index].quantity > 1) {
+        // Если количество товара больше одного, уменьшаем количество на 1
+        cart[index].quantity -= 1;
+    } else {
+        // Если товар один, удаляем его из корзины
+        cart.splice(index, 1);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    loadCart();  // Обновляем корзину на странице
+}
+
+    function keepOnlyNumbers(input) {
+            return input.replace(/\D/g, ""); // Удаляем всё, кроме цифр
+    }
+        
+    function redirectToCheckout() {
+        const query = JSON.parse(localStorage.getItem('cart')).map(item => `item=${encodeURIComponent(JSON.stringify(item))}`).join('&');
+        window.location.href = `checkout.html?${query}`;
+    }
+
+    function startSearch() {
+    const input = document.getElementById('searchInput');
+    const query = input.value.trim();
+    if (query.length < 2) {
+        document.getElementById('suggestions').innerHTML = '<div class="suggestion-item">Введіть більше символів</div>';
+        return;
+    }
+
+    fetch('search.php?q=' + encodeURIComponent(query))
+        .then(response => response.json())
+        .then(data => {
+            const suggestionsBox = document.getElementById('suggestions');
+            suggestionsBox.innerHTML = '';
+
+            if (data.length === 0) {
+                suggestionsBox.innerHTML = '<div class="suggestion-item">Нічого не знайдено</div>';
+                return;
+            }
+
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                div.onclick = () => {
+                    window.location.href = 'katalog.php?ids=' + item.ID;
+                };
+
+                const img = document.createElement('img');
+                img.src = item.image;
+                img.alt = item.name;
+
+                const text = document.createElement('span');
+                text.textContent = item.name;
+                text.style.flex = '1';
+
+                div.appendChild(img);
+                div.appendChild(text);
+                suggestionsBox.appendChild(div);
+            });
+        });
+}
+    loadCart();
+</script>
+
+
+</body>
+</html>
